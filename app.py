@@ -71,6 +71,8 @@ if 'MOCK_GROUPS' not in st.session_state:
         {"id": 4, "name": "記憶體", "note": ""},
         {"id": 5, "name": "面板", "note": ""},
         {"id": 6, "name": "機器人", "note": ""},
+        {"id": 7, "name": "矽光子", "note": ""},   # 新增
+        {"id": 8, "name": "電線電纜", "note": ""}, # 新增
     ]
 
 if 'MOCK_STOCKS' not in st.session_state:
@@ -78,7 +80,7 @@ if 'MOCK_STOCKS' not in st.session_state:
         # Group 1: 台積電
         {"id": 101, "symbol": "2330.TW", "name": "台積電", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
         
-        # Group 2: 半導體設備
+        # Group 2: 半導體設備 (3131, 6187...)
         {"id": 201, "symbol": "3131.TWO", "name": "弘塑", "group_id": 2, "ma_settings": "5,10,20", "note": ""},
         {"id": 202, "symbol": "6187.TWO", "name": "萬潤", "group_id": 2, "ma_settings": "5,10,20", "note": ""},
         {"id": 203, "symbol": "3583.TW", "name": "辛耘", "group_id": 2, "ma_settings": "5,10,20", "note": ""},
@@ -86,7 +88,7 @@ if 'MOCK_STOCKS' not in st.session_state:
         # Group 3: 聯發科
         {"id": 301, "symbol": "2454.TW", "name": "聯發科", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 4: 記憶體
+        # Group 4: 記憶體 (2344, 3006...)
         {"id": 401, "symbol": "2344.TW", "name": "華邦電", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
         {"id": 402, "symbol": "3006.TW", "name": "晶豪科", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
         {"id": 403, "symbol": "8299.TWO", "name": "群聯", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
@@ -94,14 +96,21 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 405, "symbol": "4967.TW", "name": "十銓", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
         {"id": 406, "symbol": "2337.TW", "name": "旺宏", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 5: 面板
+        # Group 5: 面板 (3481, 2409...)
         {"id": 501, "symbol": "3481.TW", "name": "群創", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
         {"id": 502, "symbol": "2409.TW", "name": "友達", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
         {"id": 503, "symbol": "6116.TW", "name": "彩晶", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 6: 機器人
+        # Group 6: 機器人 (2359, 8374...)
         {"id": 601, "symbol": "2359.TW", "name": "所羅門", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
         {"id": 602, "symbol": "8374.TW", "name": "羅昇", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
+
+        # Group 7: 矽光子 (6451, 3363) - NEW
+        {"id": 701, "symbol": "6451.TW", "name": "訊芯-KY", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
+        {"id": 702, "symbol": "3363.TWO", "name": "上詮", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
+
+        # Group 8: 電線電纜 (1605) - NEW
+        {"id": 801, "symbol": "1605.TW", "name": "華新", "group_id": 8, "ma_settings": "5,10,20", "note": ""},
     ]
 
 def get_next_id(item_list):
