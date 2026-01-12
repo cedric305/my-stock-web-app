@@ -62,99 +62,86 @@ def get_latest_quote_and_change(symbol):
 
 import streamlit as st
 
+import streamlit as st
+
 # ==========================================
-# 2. 資料庫與 CRUD 操作 (資料庫 V3 - 完整版更新)
+# 2. 資料庫與 CRUD 操作 (資料庫 V4 - 重整版)
 # ==========================================
+
+# 初始化族群資料
 if 'MOCK_GROUPS' not in st.session_state:
     st.session_state.MOCK_GROUPS = [
-        {"id": 1, "name": "台積電", "note": ""},
-        {"id": 2, "name": "半導體設備", "note": ""},
-        {"id": 3, "name": "聯發科", "note": ""},
-        {"id": 4, "name": "記憶體", "note": ""},
-        {"id": 5, "name": "面板", "note": ""},
-        {"id": 6, "name": "機器人", "note": ""},
-        {"id": 7, "name": "矽光子", "note": ""},
-        {"id": 8, "name": "電線電纜", "note": ""},
-        {"id": 9, "name": "證券股", "note": ""},
-        {"id": 10, "name": "AI 伺服器機殼", "note": ""},
-        {"id": 11, "name": "軍工", "note": ""},
-        # --- 新增族群 ---
-        {"id": 12, "name": "AI 伺服器供應鏈", "note": ""},
-        {"id": 13, "name": "IC載板", "note": ""},
-        {"id": 14, "name": "低軌衛星", "note": ""},
+        {"id": 1, "name": "記憶體", "note": ""},
+        {"id": 2, "name": "面板", "note": ""},
+        {"id": 3, "name": "AI 伺服器供應鏈", "note": ""},
+        {"id": 4, "name": "半導體設備", "note": ""},
+        {"id": 5, "name": "矽光子", "note": ""},
+        {"id": 6, "name": "低軌衛星", "note": ""},
+        {"id": 7, "name": "電線電纜", "note": ""},
+        {"id": 8, "name": "AI 伺服器機殼", "note": ""},
+        {"id": 9, "name": "機器人", "note": ""},
+        {"id": 10, "name": "軍工", "note": ""},
+        {"id": 11, "name": "IC載板", "note": ""},
     ]
 
+# 初始化個股資料
 if 'MOCK_STOCKS' not in st.session_state:
     st.session_state.MOCK_STOCKS = [
-        # Group 1: 台積電
-        {"id": 101, "symbol": "2330.TW", "name": "台積電", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
-        
-        # Group 2: 半導體設備
-        {"id": 201, "symbol": "3131.TWO", "name": "弘塑", "group_id": 2, "ma_settings": "5,10,20", "note": ""},
-        {"id": 202, "symbol": "6187.TWO", "name": "萬潤", "group_id": 2, "ma_settings": "5,10,20", "note": ""},
-        {"id": 203, "symbol": "3583.TW", "name": "辛耘", "group_id": 2, "ma_settings": "5,10,20", "note": ""},
+        # Group 1: 記憶體
+        {"id": 101, "symbol": "2344.TW", "name": "華邦電", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
+        {"id": 102, "symbol": "3006.TW", "name": "晶豪科", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
+        {"id": 103, "symbol": "8299.TWO", "name": "群聯", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
+        {"id": 104, "symbol": "2408.TW", "name": "南亞科", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
+        {"id": 105, "symbol": "4967.TW", "name": "十銓", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
+        {"id": 106, "symbol": "2337.TW", "name": "旺宏", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
+        {"id": 107, "symbol": "3260.TWO", "name": "威剛", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
+        {"id": 108, "symbol": "3135.TWO", "name": "凌航", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 3: 聯發科
-        {"id": 301, "symbol": "2454.TW", "name": "聯發科", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
+        # Group 2: 面板
+        {"id": 201, "symbol": "3481.TW", "name": "群創", "group_id": 2, "ma_settings": "5,10,20", "note": ""},
+        {"id": 202, "symbol": "2409.TW", "name": "友達", "group_id": 2, "ma_settings": "5,10,20", "note": ""},
+        {"id": 203, "symbol": "6116.TW", "name": "彩晶", "group_id": 2, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 4: 記憶體
-        {"id": 401, "symbol": "2344.TW", "name": "華邦電", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
-        {"id": 402, "symbol": "3006.TW", "name": "晶豪科", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
-        {"id": 403, "symbol": "8299.TWO", "name": "群聯", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
-        {"id": 404, "symbol": "2408.TW", "name": "南亞科", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
-        {"id": 405, "symbol": "4967.TW", "name": "十銓", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
-        {"id": 406, "symbol": "2337.TW", "name": "旺宏", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
-        {"id": 407, "symbol": "3260.TWO", "name": "威剛", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
-        {"id": 408, "symbol": "3135.TW", "name": "凌航", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
+        # Group 3: AI 伺服器供應鏈
+        {"id": 301, "symbol": "5274.TWO", "name": "信驊", "group_id": 3, "ma_settings": "5,10,20", "note": "BMC"},
+        {"id": 302, "symbol": "8299.TWO", "name": "群聯", "group_id": 3, "ma_settings": "5,10,20", "note": "Retimer/Storage"},
 
-        # Group 5: 面板
-        {"id": 501, "symbol": "3481.TW", "name": "群創", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
-        {"id": 502, "symbol": "2409.TW", "name": "友達", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
-        {"id": 503, "symbol": "6116.TW", "name": "彩晶", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
+        # Group 4: 半導體設備
+        {"id": 401, "symbol": "3131.TWO", "name": "弘塑", "group_id": 4, "ma_settings": "5,10,20", "note": "CoWoS設備"},
+        {"id": 402, "symbol": "6187.TWO", "name": "萬潤", "group_id": 4, "ma_settings": "5,10,20", "note": "CoWoS設備"},
+        {"id": 403, "symbol": "3583.TW", "name": "辛耘", "group_id": 4, "ma_settings": "5,10,20", "note": "CoWoS設備"},
 
-        # Group 6: 機器人
-        {"id": 601, "symbol": "2359.TW", "name": "所羅門", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
-        {"id": 602, "symbol": "8374.TW", "name": "羅昇", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
+        # Group 5: 矽光子 (CPO)
+        {"id": 501, "symbol": "6451.TW", "name": "訊芯-KY", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
+        {"id": 502, "symbol": "3363.TWO", "name": "上詮", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
+        {"id": 503, "symbol": "3163.TWO", "name": "波若威", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
+        {"id": 504, "symbol": "6442.TW", "name": "光聖", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
+        {"id": 505, "symbol": "4979.TWO", "name": "華星光", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
+        {"id": 506, "symbol": "2345.TW", "name": "智邦", "group_id": 5, "ma_settings": "5,10,20", "note": "交換器"},
+        {"id": 507, "symbol": "2455.TW", "name": "全新", "group_id": 5, "ma_settings": "5,10,20", "note": "雷射磊晶"},
 
-        # Group 7: 矽光子
-        {"id": 701, "symbol": "6451.TW", "name": "訊芯-KY", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
-        {"id": 702, "symbol": "3363.TWO", "name": "上詮", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
-        {"id": 703, "symbol": "3163.TWO", "name": "波若威", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
-        {"id": 704, "symbol": "6442.TW", "name": "光聖", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
-        {"id": 705, "symbol": "4979.TWO", "name": "華星光", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
-        {"id": 706, "symbol": "2345.TW", "name": "智邦", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
-        {"id": 707, "symbol": "2455.TW", "name": "全新", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
+        # Group 6: 低軌衛星
+        {"id": 601, "symbol": "2313.TW", "name": "華通", "group_id": 6, "ma_settings": "5,10,20", "note": "HDI"},
+        {"id": 602, "symbol": "2367.TW", "name": "燿華", "group_id": 6, "ma_settings": "5,10,20", "note": "HDI"},
 
-        # Group 8: 電線電纜
-        {"id": 801, "symbol": "1605.TW", "name": "華新", "group_id": 8, "ma_settings": "5,10,20", "note": ""},
+        # Group 7: 電線電纜
+        {"id": 701, "symbol": "1605.TW", "name": "華新", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 9: 證券股
-        {"id": 901, "symbol": "6016.TWO", "name": "康和證", "group_id": 9, "ma_settings": "5,10,20", "note": ""},
-        {"id": 902, "symbol": "6015.TWO", "name": "宏遠證", "group_id": 9, "ma_settings": "5,10,20", "note": ""},
-        {"id": 903, "symbol": "2855.TW", "name": "統一證", "group_id": 9, "ma_settings": "5,10,20", "note": ""},
-        {"id": 904, "symbol": "6005.TW", "name": "群益證", "group_id": 9, "ma_settings": "5,10,20", "note": ""},
+        # Group 8: AI 伺服器機殼
+        {"id": 801, "symbol": "3693.TWO", "name": "營邦", "group_id": 8, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 10: AI 伺服器機殼
-        {"id": 1001, "symbol": "3693.TWO", "name": "營邦", "group_id": 10, "ma_settings": "5,10,20", "note": ""},
+        # Group 9: 機器人
+        {"id": 901, "symbol": "2359.TW", "name": "所羅門", "group_id": 9, "ma_settings": "5,10,20", "note": ""},
+        {"id": 902, "symbol": "8374.TW", "name": "羅昇", "group_id": 9, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 11: 軍工
-        {"id": 1101, "symbol": "2634.TW", "name": "漢翔", "group_id": 11, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1102, "symbol": "8033.TW", "name": "雷虎", "group_id": 11, "ma_settings": "5,10,20", "note": ""},
+        # Group 10: 軍工
+        {"id": 1001, "symbol": "2634.TW", "name": "漢翔", "group_id": 10, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1002, "symbol": "8033.TW", "name": "雷虎", "group_id": 10, "ma_settings": "5,10,20", "note": ""},
 
-        # --- 以下為新增項目 ---
-
-        # Group 12: AI 伺服器供應鏈 (5274, 8299)
-        {"id": 1201, "symbol": "5274.TWO", "name": "信驊", "group_id": 12, "ma_settings": "5,10,20", "note": "BMC晶片"},
-        {"id": 1202, "symbol": "8299.TWO", "name": "群聯", "group_id": 12, "ma_settings": "5,10,20", "note": "Retimer/記憶體"},
-
-        # Group 13: IC載板 (3037, 3189, 8046)
-        {"id": 1301, "symbol": "3037.TW", "name": "欣興", "group_id": 13, "ma_settings": "5,10,20", "note": "ABF載板"},
-        {"id": 1302, "symbol": "3189.TW", "name": "景碩", "group_id": 13, "ma_settings": "5,10,20", "note": "ABF/BT"},
-        {"id": 1303, "symbol": "8046.TW", "name": "南電", "group_id": 13, "ma_settings": "5,10,20", "note": "ABF載板"},
-
-        # Group 14: 低軌衛星 (2313, 2367)
-        {"id": 1401, "symbol": "2313.TW", "name": "華通", "group_id": 14, "ma_settings": "5,10,20", "note": "HDI板/衛星板"},
-        {"id": 1402, "symbol": "2367.TW", "name": "燿華", "group_id": 14, "ma_settings": "5,10,20", "note": "衛星板"},
+        # Group 11: IC載板
+        {"id": 1101, "symbol": "3037.TW", "name": "欣興", "group_id": 11, "ma_settings": "5,10,20", "note": "ABF"},
+        {"id": 1102, "symbol": "3189.TW", "name": "景碩", "group_id": 11, "ma_settings": "5,10,20", "note": "ABF/BT"},
+        {"id": 1103, "symbol": "8046.TW", "name": "南電", "group_id": 11, "ma_settings": "5,10,20", "note": "ABF"},
     ]
 
 def get_next_id(item_list):
@@ -532,5 +519,6 @@ elif st.session_state.page == 'stock_detail':
     if st.button(f"⬅️ 返回 {st.session_state.selected_group['name']}", use_container_width=True):
         st.session_state.page = 'group_detail'
         st.rerun()
+
 
 
