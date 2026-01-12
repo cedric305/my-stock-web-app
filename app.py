@@ -60,8 +60,10 @@ def get_latest_quote_and_change(symbol):
         return df.iloc[-1]['Close'], 0.0
     return None, None
 
+import streamlit as st
+
 # ==========================================
-# 2. 資料庫與 CRUD 操作 (資料庫 V3 - 完整版)
+# 2. 資料庫與 CRUD 操作 (資料庫 V3 - 完整版更新)
 # ==========================================
 if 'MOCK_GROUPS' not in st.session_state:
     st.session_state.MOCK_GROUPS = [
@@ -73,9 +75,13 @@ if 'MOCK_GROUPS' not in st.session_state:
         {"id": 6, "name": "機器人", "note": ""},
         {"id": 7, "name": "矽光子", "note": ""},
         {"id": 8, "name": "電線電纜", "note": ""},
-        {"id": 9, "name": "證券股", "note": ""},       # New
-        {"id": 10, "name": "AI 伺服器機殼", "note": ""}, # New
-        {"id": 11, "name": "軍工", "note": ""},          # New
+        {"id": 9, "name": "證券股", "note": ""},
+        {"id": 10, "name": "AI 伺服器機殼", "note": ""},
+        {"id": 11, "name": "軍工", "note": ""},
+        # --- 新增族群 ---
+        {"id": 12, "name": "AI 伺服器供應鏈", "note": ""},
+        {"id": 13, "name": "IC載板", "note": ""},
+        {"id": 14, "name": "低軌衛星", "note": ""},
     ]
 
 if 'MOCK_STOCKS' not in st.session_state:
@@ -110,30 +116,45 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 601, "symbol": "2359.TW", "name": "所羅門", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
         {"id": 602, "symbol": "8374.TW", "name": "羅昇", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 7: 矽光子 (6451, 3363, 3163, 6442, 4979, 2345, 2455)
+        # Group 7: 矽光子
         {"id": 701, "symbol": "6451.TW", "name": "訊芯-KY", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
         {"id": 702, "symbol": "3363.TWO", "name": "上詮", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
         {"id": 703, "symbol": "3163.TWO", "name": "波若威", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
         {"id": 704, "symbol": "6442.TW", "name": "光聖", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
         {"id": 705, "symbol": "4979.TWO", "name": "華星光", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
-        {"id": 706, "symbol": "2345.TW", "name": "智邦", "group_id": 7, "ma_settings": "5,10,20", "note": ""},   # New
-        {"id": 707, "symbol": "2455.TW", "name": "全新", "group_id": 7, "ma_settings": "5,10,20", "note": ""},   # New
+        {"id": 706, "symbol": "2345.TW", "name": "智邦", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
+        {"id": 707, "symbol": "2455.TW", "name": "全新", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
 
         # Group 8: 電線電纜
         {"id": 801, "symbol": "1605.TW", "name": "華新", "group_id": 8, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 9: 證券股 (6016, 6015, 2855, 6005) - NEW
+        # Group 9: 證券股
         {"id": 901, "symbol": "6016.TWO", "name": "康和證", "group_id": 9, "ma_settings": "5,10,20", "note": ""},
         {"id": 902, "symbol": "6015.TWO", "name": "宏遠證", "group_id": 9, "ma_settings": "5,10,20", "note": ""},
         {"id": 903, "symbol": "2855.TW", "name": "統一證", "group_id": 9, "ma_settings": "5,10,20", "note": ""},
         {"id": 904, "symbol": "6005.TW", "name": "群益證", "group_id": 9, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 10: AI 伺服器機殼 (3693) - NEW
+        # Group 10: AI 伺服器機殼
         {"id": 1001, "symbol": "3693.TWO", "name": "營邦", "group_id": 10, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 11: 軍工 (2634, 8033) - NEW
+        # Group 11: 軍工
         {"id": 1101, "symbol": "2634.TW", "name": "漢翔", "group_id": 11, "ma_settings": "5,10,20", "note": ""},
         {"id": 1102, "symbol": "8033.TW", "name": "雷虎", "group_id": 11, "ma_settings": "5,10,20", "note": ""},
+
+        # --- 以下為新增項目 ---
+
+        # Group 12: AI 伺服器供應鏈 (5274, 8299)
+        {"id": 1201, "symbol": "5274.TWO", "name": "信驊", "group_id": 12, "ma_settings": "5,10,20", "note": "BMC晶片"},
+        {"id": 1202, "symbol": "8299.TWO", "name": "群聯", "group_id": 12, "ma_settings": "5,10,20", "note": "Retimer/記憶體"},
+
+        # Group 13: IC載板 (3037, 3189, 8046)
+        {"id": 1301, "symbol": "3037.TW", "name": "欣興", "group_id": 13, "ma_settings": "5,10,20", "note": "ABF載板"},
+        {"id": 1302, "symbol": "3189.TW", "name": "景碩", "group_id": 13, "ma_settings": "5,10,20", "note": "ABF/BT"},
+        {"id": 1303, "symbol": "8046.TW", "name": "南電", "group_id": 13, "ma_settings": "5,10,20", "note": "ABF載板"},
+
+        # Group 14: 低軌衛星 (2313, 2367)
+        {"id": 1401, "symbol": "2313.TW", "name": "華通", "group_id": 14, "ma_settings": "5,10,20", "note": "HDI板/衛星板"},
+        {"id": 1402, "symbol": "2367.TW", "name": "燿華", "group_id": 14, "ma_settings": "5,10,20", "note": "衛星板"},
     ]
 
 def get_next_id(item_list):
@@ -511,4 +532,5 @@ elif st.session_state.page == 'stock_detail':
     if st.button(f"⬅️ 返回 {st.session_state.selected_group['name']}", use_container_width=True):
         st.session_state.page = 'group_detail'
         st.rerun()
+
 
