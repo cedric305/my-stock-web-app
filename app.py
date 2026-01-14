@@ -60,14 +60,8 @@ def get_latest_quote_and_change(symbol):
         return df.iloc[-1]['Close'], 0.0
     return None, None
 
-import streamlit as st
-
-import streamlit as st
-
-import streamlit as st
-
 # ==========================================
-# 2. 資料庫與 CRUD 操作 (資料庫 V5 - 綠能與載板更新版)
+# 2. 資料庫與 CRUD 操作 (資料庫 V6 - 被動元件與重電更新版)
 # ==========================================
 
 # 初始化族群資料
@@ -85,6 +79,8 @@ if 'MOCK_GROUPS' not in st.session_state:
         {"id": 10, "name": "軍工", "note": ""},
         {"id": 11, "name": "IC載板", "note": ""},
         {"id": 12, "name": "綠能", "note": ""},
+        {"id": 13, "name": "被動元件", "note": ""},
+        {"id": 14, "name": "重電", "note": ""},
     ]
 
 # 初始化個股資料
@@ -107,7 +103,7 @@ if 'MOCK_STOCKS' not in st.session_state:
 
         # Group 3: AI 伺服器供應鏈
         {"id": 301, "symbol": "5274.TWO", "name": "信驊", "group_id": 3, "ma_settings": "5,10,20", "note": "BMC"},
-        {"id": 302, "symbol": "8299.TWO", "name": "群聯", "group_id": 3, "ma_settings": "5,10,20", "note": "Retimer/Storage"},
+        {"id": 302, "symbol": "8299.TWO", "name": "群聯", "group_id": 3, "ma_settings": "5,10,20", "note": "Retimer"},
 
         # Group 4: 半導體設備
         {"id": 401, "symbol": "3131.TWO", "name": "弘塑", "group_id": 4, "ma_settings": "5,10,20", "note": "CoWoS"},
@@ -126,6 +122,7 @@ if 'MOCK_STOCKS' not in st.session_state:
         # Group 6: 低軌衛星
         {"id": 601, "symbol": "2313.TW", "name": "華通", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
         {"id": 602, "symbol": "2367.TW", "name": "燿華", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
+        {"id": 603, "symbol": "2312.TW", "name": "金寶", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
 
         # Group 7: 電線電纜
         {"id": 701, "symbol": "1605.TW", "name": "華新", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
@@ -145,13 +142,28 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 1101, "symbol": "3037.TW", "name": "欣興", "group_id": 11, "ma_settings": "5,10,20", "note": "ABF"},
         {"id": 1102, "symbol": "3189.TW", "name": "景碩", "group_id": 11, "ma_settings": "5,10,20", "note": "ABF/BT"},
         {"id": 1103, "symbol": "8046.TW", "name": "南電", "group_id": 11, "ma_settings": "5,10,20", "note": "ABF"},
-        {"id": 1104, "symbol": "4958.TW", "name": "臻鼎-KY", "group_id": 11, "ma_settings": "5,10,20", "note": "PCB/載板"},
+        {"id": 1104, "symbol": "4958.TW", "name": "臻鼎-KY", "group_id": 11, "ma_settings": "5,10,20", "note": "PCB"},
 
-        # Group 12: 綠能 (6624, 8440, 8422, 6806)
-        {"id": 1201, "symbol": "6624.TWO", "name": "萬年清", "group_id": 12, "ma_settings": "5,10,20", "note": "廢水處理"},
-        {"id": 1202, "symbol": "8440.TWO", "name": "綠電", "group_id": 12, "ma_settings": "5,10,20", "note": "回收"},
-        {"id": 1203, "symbol": "8422.TW", "name": "可寧衛", "group_id": 12, "ma_settings": "5,10,20", "note": "廢棄物"},
-        {"id": 1204, "symbol": "6806.TW", "name": "森崴能源", "group_id": 12, "ma_settings": "5,10,20", "note": "再生能源"},
+        # Group 12: 綠能
+        {"id": 1201, "symbol": "6624.TWO", "name": "萬年清", "group_id": 12, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1202, "symbol": "8440.TWO", "name": "綠電", "group_id": 12, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1203, "symbol": "8422.TW", "name": "可寧衛", "group_id": 12, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1204, "symbol": "6806.TW", "name": "森崴能源", "group_id": 12, "ma_settings": "5,10,20", "note": ""},
+
+        # Group 13: 被動元件 (2327, 2492, 2375, 8042, 8043, 6173, 2478)
+        {"id": 1301, "symbol": "2327.TW", "name": "國巨", "group_id": 13, "ma_settings": "5,10,20", "note": "龍頭"},
+        {"id": 1302, "symbol": "2492.TW", "name": "華新科", "group_id": 13, "ma_settings": "5,10,20", "note": "華新集團"},
+        {"id": 1303, "symbol": "2375.TW", "name": "凱美", "group_id": 13, "ma_settings": "5,10,20", "note": "鋁質電容"},
+        {"id": 1304, "symbol": "8042.TW", "name": "金山電", "group_id": 13, "ma_settings": "5,10,20", "note": "鋁質電容"},
+        {"id": 1305, "symbol": "8043.TWO", "name": "蜜望實", "group_id": 13, "ma_settings": "5,10,20", "note": "MLCC代理"},
+        {"id": 1306, "symbol": "6173.TWO", "name": "信昌電", "group_id": 13, "ma_settings": "5,10,20", "note": "陶瓷粉末"},
+        {"id": 1307, "symbol": "2478.TW", "name": "大毅", "group_id": 13, "ma_settings": "5,10,20", "note": "晶片電阻"},
+
+        # Group 14: 重電 (1504, 1513, 1519, 1503)
+        {"id": 1401, "symbol": "1504.TW", "name": "東元", "group_id": 14, "ma_settings": "5,10,20", "note": "馬達"},
+        {"id": 1402, "symbol": "1513.TW", "name": "中興電", "group_id": 14, "ma_settings": "5,10,20", "note": "GIS設備"},
+        {"id": 1403, "symbol": "1519.TW", "name": "華城", "group_id": 14, "ma_settings": "5,10,20", "note": "變壓器"},
+        {"id": 1404, "symbol": "1503.TW", "name": "士電", "group_id": 14, "ma_settings": "5,10,20", "note": "重電/車電"},
     ]
 
 def get_next_id(item_list):
@@ -529,6 +541,7 @@ elif st.session_state.page == 'stock_detail':
     if st.button(f"⬅️ 返回 {st.session_state.selected_group['name']}", use_container_width=True):
         st.session_state.page = 'group_detail'
         st.rerun()
+
 
 
 
