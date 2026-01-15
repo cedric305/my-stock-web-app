@@ -60,8 +60,10 @@ def get_latest_quote_and_change(symbol):
         return df.iloc[-1]['Close'], 0.0
     return None, None
 
+import streamlit as st
+
 # ==========================================
-# 2. 資料庫與 CRUD 操作 (資料庫 V6 - 被動元件與重電更新版)
+# 2. 資料庫與 CRUD 操作 (資料庫 V7 - 低軌衛星增補版)
 # ==========================================
 
 # 初始化族群資料
@@ -123,6 +125,7 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 601, "symbol": "2313.TW", "name": "華通", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
         {"id": 602, "symbol": "2367.TW", "name": "燿華", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
         {"id": 603, "symbol": "2312.TW", "name": "金寶", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
+        {"id": 604, "symbol": "2485.TW", "name": "兆赫", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
 
         # Group 7: 電線電纜
         {"id": 701, "symbol": "1605.TW", "name": "華新", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
@@ -150,20 +153,20 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 1203, "symbol": "8422.TW", "name": "可寧衛", "group_id": 12, "ma_settings": "5,10,20", "note": ""},
         {"id": 1204, "symbol": "6806.TW", "name": "森崴能源", "group_id": 12, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 13: 被動元件 (2327, 2492, 2375, 8042, 8043, 6173, 2478)
+        # Group 13: 被動元件
         {"id": 1301, "symbol": "2327.TW", "name": "國巨", "group_id": 13, "ma_settings": "5,10,20", "note": "龍頭"},
-        {"id": 1302, "symbol": "2492.TW", "name": "華新科", "group_id": 13, "ma_settings": "5,10,20", "note": "華新集團"},
-        {"id": 1303, "symbol": "2375.TW", "name": "凱美", "group_id": 13, "ma_settings": "5,10,20", "note": "鋁質電容"},
-        {"id": 1304, "symbol": "8042.TW", "name": "金山電", "group_id": 13, "ma_settings": "5,10,20", "note": "鋁質電容"},
-        {"id": 1305, "symbol": "8043.TWO", "name": "蜜望實", "group_id": 13, "ma_settings": "5,10,20", "note": "MLCC代理"},
-        {"id": 1306, "symbol": "6173.TWO", "name": "信昌電", "group_id": 13, "ma_settings": "5,10,20", "note": "陶瓷粉末"},
-        {"id": 1307, "symbol": "2478.TW", "name": "大毅", "group_id": 13, "ma_settings": "5,10,20", "note": "晶片電阻"},
+        {"id": 1302, "symbol": "2492.TW", "name": "華新科", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1303, "symbol": "2375.TW", "name": "凱美", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1304, "symbol": "8042.TW", "name": "金山電", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1305, "symbol": "8043.TWO", "name": "蜜望實", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1306, "symbol": "6173.TWO", "name": "信昌電", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1307, "symbol": "2478.TW", "name": "大毅", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 14: 重電 (1504, 1513, 1519, 1503)
-        {"id": 1401, "symbol": "1504.TW", "name": "東元", "group_id": 14, "ma_settings": "5,10,20", "note": "馬達"},
-        {"id": 1402, "symbol": "1513.TW", "name": "中興電", "group_id": 14, "ma_settings": "5,10,20", "note": "GIS設備"},
-        {"id": 1403, "symbol": "1519.TW", "name": "華城", "group_id": 14, "ma_settings": "5,10,20", "note": "變壓器"},
-        {"id": 1404, "symbol": "1503.TW", "name": "士電", "group_id": 14, "ma_settings": "5,10,20", "note": "重電/車電"},
+        # Group 14: 重電
+        {"id": 1401, "symbol": "1504.TW", "name": "東元", "group_id": 14, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1402, "symbol": "1513.TW", "name": "中興電", "group_id": 14, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1403, "symbol": "1519.TW", "name": "華城", "group_id": 14, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1404, "symbol": "1503.TW", "name": "士電", "group_id": 14, "ma_settings": "5,10,20", "note": ""},
     ]
 
 def get_next_id(item_list):
@@ -541,6 +544,7 @@ elif st.session_state.page == 'stock_detail':
     if st.button(f"⬅️ 返回 {st.session_state.selected_group['name']}", use_container_width=True):
         st.session_state.page = 'group_detail'
         st.rerun()
+
 
 
 
