@@ -184,8 +184,8 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 1606, "symbol": "2457.TW", "name": "飛宏", "group_id": 16, "ma_settings": "5,10,20", "note": "充電樁"},
 
         # Group 17: 半導體測試
-        {"id": 1701, "symbol": "6510.TW", "name": "精測", "group_id": 17, "ma_settings": "5,10,20", "note": "測試卡"},
-        {"id": 1702, "symbol": "6223.TW", "name": "旺矽", "group_id": 17, "ma_settings": "5,10,20", "note": "探針卡"},
+        {"id": 1701, "symbol": "6510.TWO", "name": "精測", "group_id": 17, "ma_settings": "5,10,20", "note": "測試卡"},
+        {"id": 1702, "symbol": "6223.TWO", "name": "旺矽", "group_id": 17, "ma_settings": "5,10,20", "note": "探針卡"},
         {"id": 1703, "symbol": "6515.TW", "name": "穎崴", "group_id": 17, "ma_settings": "5,10,20", "note": "測試座"},
     ]
 
@@ -564,6 +564,7 @@ elif st.session_state.page == 'stock_detail':
     if st.button(f"⬅️ 返回 {st.session_state.selected_group['name']}", use_container_width=True):
         st.session_state.page = 'group_detail'
         st.rerun()
+
 
 
 
