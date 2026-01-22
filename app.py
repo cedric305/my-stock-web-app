@@ -60,10 +60,8 @@ def get_latest_quote_and_change(symbol):
         return df.iloc[-1]['Close'], 0.0
     return None, None
 
-import streamlit as st
-
 # ==========================================
-# 2. 資料庫與 CRUD 操作 (資料庫 V8 - 完整擴充版)
+# 2. 資料庫與 CRUD 操作 (資料庫 V9 - BBU備援電池新增版)
 # ==========================================
 
 # 初始化族群資料
@@ -86,6 +84,7 @@ if 'MOCK_GROUPS' not in st.session_state:
         {"id": 15, "name": "被動元件", "note": ""},
         {"id": 16, "name": "重電", "note": ""},
         {"id": 17, "name": "半導體測試", "note": ""},
+        {"id": 18, "name": "BBU備援電池", "note": ""},
     ]
 
 # 初始化個股資料
@@ -158,6 +157,7 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 1302, "symbol": "2367.TW", "name": "燿華", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
         {"id": 1303, "symbol": "2312.TW", "name": "金寶", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
         {"id": 1304, "symbol": "2485.TW", "name": "兆赫", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1305, "symbol": "6285.TW", "name": "啟碁", "group_id": 13, "ma_settings": "5,10,20", "note": "網通"},
 
         # Group 14: 綠能
         {"id": 1401, "symbol": "6624.TWO", "name": "萬年清", "group_id": 14, "ma_settings": "5,10,20", "note": ""},
@@ -184,9 +184,16 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 1606, "symbol": "2457.TW", "name": "飛宏", "group_id": 16, "ma_settings": "5,10,20", "note": "充電樁"},
 
         # Group 17: 半導體測試
-        {"id": 1701, "symbol": "6510.TWO", "name": "精測", "group_id": 17, "ma_settings": "5,10,20", "note": "測試卡"},
-        {"id": 1702, "symbol": "6223.TWO", "name": "旺矽", "group_id": 17, "ma_settings": "5,10,20", "note": "探針卡"},
+        {"id": 1701, "symbol": "6510.TW", "name": "精測", "group_id": 17, "ma_settings": "5,10,20", "note": "測試卡"},
+        {"id": 1702, "symbol": "6223.TW", "name": "旺矽", "group_id": 17, "ma_settings": "5,10,20", "note": "探針卡"},
         {"id": 1703, "symbol": "6515.TW", "name": "穎崴", "group_id": 17, "ma_settings": "5,10,20", "note": "測試座"},
+
+        # Group 18: BBU備援電池
+        {"id": 1801, "symbol": "2301.TW", "name": "光寶科", "group_id": 18, "ma_settings": "5,10,20", "note": "電源"},
+        {"id": 1802, "symbol": "2308.TW", "name": "台達電", "group_id": 18, "ma_settings": "5,10,20", "note": "電源龍頭"},
+        {"id": 1803, "symbol": "3211.TW", "name": "順達", "group_id": 18, "ma_settings": "5,10,20", "note": "電池模組"},
+        {"id": 1804, "symbol": "6781.TW", "name": "AES-KY", "group_id": 18, "ma_settings": "5,10,20", "note": "高階電池"},
+        {"id": 1805, "symbol": "4931.TWO", "name": "新普", "group_id": 18, "ma_settings": "5,10,20", "note": "電池模組"},
     ]
 
 def get_next_id(item_list):
@@ -564,6 +571,7 @@ elif st.session_state.page == 'stock_detail':
     if st.button(f"⬅️ 返回 {st.session_state.selected_group['name']}", use_container_width=True):
         st.session_state.page = 'group_detail'
         st.rerun()
+
 
 
 
