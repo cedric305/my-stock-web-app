@@ -61,7 +61,7 @@ def get_latest_quote_and_change(symbol):
     return None, None
 
 # ==========================================
-# 2. 資料庫與 CRUD 操作 (資料庫 V9 - BBU備援電池新增版)
+# 2. 資料庫與 CRUD 操作 (資料庫 V10 - 電子通路與矽光子擴充版)
 # ==========================================
 
 # 初始化族群資料
@@ -85,6 +85,7 @@ if 'MOCK_GROUPS' not in st.session_state:
         {"id": 16, "name": "重電", "note": ""},
         {"id": 17, "name": "半導體測試", "note": ""},
         {"id": 18, "name": "BBU備援電池", "note": ""},
+        {"id": 19, "name": "電子通路", "note": ""},
     ]
 
 # 初始化個股資料
@@ -125,6 +126,8 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 605, "symbol": "4979.TWO", "name": "華星光", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
         {"id": 606, "symbol": "2345.TW", "name": "智邦", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
         {"id": 607, "symbol": "2455.TW", "name": "全新", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
+        {"id": 608, "symbol": "6588.TWO", "name": "東典光電", "group_id": 6, "ma_settings": "5,10,20", "note": "光通訊濾光片"},
+        {"id": 609, "symbol": "6426.TWO", "name": "統新", "group_id": 6, "ma_settings": "5,10,20", "note": "光通訊濾光片"},
 
         # Group 7: 電線電纜
         {"id": 701, "symbol": "1605.TW", "name": "華新", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
@@ -151,6 +154,7 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 1202, "symbol": "3189.TW", "name": "景碩", "group_id": 12, "ma_settings": "5,10,20", "note": "ABF/BT"},
         {"id": 1203, "symbol": "8046.TW", "name": "南電", "group_id": 12, "ma_settings": "5,10,20", "note": "ABF"},
         {"id": 1204, "symbol": "4958.TW", "name": "臻鼎-KY", "group_id": 12, "ma_settings": "5,10,20", "note": "PCB"},
+        {"id": 1205, "symbol": "2383.TW", "name": "台光電", "group_id": 12, "ma_settings": "5,10,20", "note": "CCL/載板材料"},
 
         # Group 13: 低軌衛星
         {"id": 1301, "symbol": "2313.TW", "name": "華通", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
@@ -194,6 +198,10 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 1803, "symbol": "3211.TW", "name": "順達", "group_id": 18, "ma_settings": "5,10,20", "note": "電池模組"},
         {"id": 1804, "symbol": "6781.TW", "name": "AES-KY", "group_id": 18, "ma_settings": "5,10,20", "note": "高階電池"},
         {"id": 1805, "symbol": "4931.TWO", "name": "新普", "group_id": 18, "ma_settings": "5,10,20", "note": "電池模組"},
+
+        # Group 19: 電子通路
+        {"id": 1901, "symbol": "8096.TWO", "name": "擎亞", "group_id": 19, "ma_settings": "5,10,20", "note": "IC通路"},
+        {"id": 1902, "symbol": "3028.TW", "name": "增你強", "group_id": 19, "ma_settings": "5,10,20", "note": "IC通路"},
     ]
 
 def get_next_id(item_list):
@@ -571,6 +579,7 @@ elif st.session_state.page == 'stock_detail':
     if st.button(f"⬅️ 返回 {st.session_state.selected_group['name']}", use_container_width=True):
         st.session_state.page = 'group_detail'
         st.rerun()
+
 
 
 
