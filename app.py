@@ -61,7 +61,7 @@ def get_latest_quote_and_change(symbol):
     return None, None
 
 # ==========================================
-# 2. 資料庫與 CRUD 操作 (資料庫 V10 - 電子通路與矽光子擴充版)
+# 2. 資料庫與 CRUD 操作 (資料庫 V11 - 矽光子增補版)
 # ==========================================
 
 # 初始化族群資料
@@ -118,7 +118,7 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 501, "symbol": "2359.TW", "name": "所羅門", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
         {"id": 502, "symbol": "8374.TW", "name": "羅昇", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 6: 矽光子
+        # Group 6: 矽光子 (6451, 3363, 3163, 6442, 4979, 2345, 2455, 6588, 6426, 7728)
         {"id": 601, "symbol": "6451.TW", "name": "訊芯-KY", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
         {"id": 602, "symbol": "3363.TWO", "name": "上詮", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
         {"id": 603, "symbol": "3163.TWO", "name": "波若威", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
@@ -128,6 +128,7 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 607, "symbol": "2455.TW", "name": "全新", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
         {"id": 608, "symbol": "6588.TWO", "name": "東典光電", "group_id": 6, "ma_settings": "5,10,20", "note": "光通訊濾光片"},
         {"id": 609, "symbol": "6426.TWO", "name": "統新", "group_id": 6, "ma_settings": "5,10,20", "note": "光通訊濾光片"},
+        {"id": 610, "symbol": "7728.TWO", "name": "光矩科", "group_id": 6, "ma_settings": "5,10,20", "note": "LPO透鏡/興櫃"},
 
         # Group 7: 電線電纜
         {"id": 701, "symbol": "1605.TW", "name": "華新", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
@@ -154,7 +155,7 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 1202, "symbol": "3189.TW", "name": "景碩", "group_id": 12, "ma_settings": "5,10,20", "note": "ABF/BT"},
         {"id": 1203, "symbol": "8046.TW", "name": "南電", "group_id": 12, "ma_settings": "5,10,20", "note": "ABF"},
         {"id": 1204, "symbol": "4958.TW", "name": "臻鼎-KY", "group_id": 12, "ma_settings": "5,10,20", "note": "PCB"},
-        {"id": 1205, "symbol": "2383.TW", "name": "台光電", "group_id": 12, "ma_settings": "5,10,20", "note": "CCL/載板材料"},
+        {"id": 1205, "symbol": "2383.TW", "name": "台光電", "group_id": 12, "ma_settings": "5,10,20", "note": "CCL"},
 
         # Group 13: 低軌衛星
         {"id": 1301, "symbol": "2313.TW", "name": "華通", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
@@ -579,6 +580,7 @@ elif st.session_state.page == 'stock_detail':
     if st.button(f"⬅️ 返回 {st.session_state.selected_group['name']}", use_container_width=True):
         st.session_state.page = 'group_detail'
         st.rerun()
+
 
 
 
