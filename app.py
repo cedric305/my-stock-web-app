@@ -60,8 +60,10 @@ def get_latest_quote_and_change(symbol):
         return df.iloc[-1]['Close'], 0.0
     return None, None
 
+import streamlit as st
+
 # ==========================================
-# 2. 資料庫與 CRUD 操作 (資料庫 V11 - 矽光子增補版)
+# 2. 資料庫與 CRUD 操作 (資料庫 V12 - 太陽能擴充版)
 # ==========================================
 
 # 初始化族群資料
@@ -86,6 +88,7 @@ if 'MOCK_GROUPS' not in st.session_state:
         {"id": 17, "name": "半導體測試", "note": ""},
         {"id": 18, "name": "BBU備援電池", "note": ""},
         {"id": 19, "name": "電子通路", "note": ""},
+        {"id": 20, "name": "太陽能", "note": ""},
     ]
 
 # 初始化個股資料
@@ -118,7 +121,7 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 501, "symbol": "2359.TW", "name": "所羅門", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
         {"id": 502, "symbol": "8374.TW", "name": "羅昇", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 6: 矽光子 (6451, 3363, 3163, 6442, 4979, 2345, 2455, 6588, 6426, 7728)
+        # Group 6: 矽光子
         {"id": 601, "symbol": "6451.TW", "name": "訊芯-KY", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
         {"id": 602, "symbol": "3363.TWO", "name": "上詮", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
         {"id": 603, "symbol": "3163.TWO", "name": "波若威", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
@@ -128,7 +131,7 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 607, "symbol": "2455.TW", "name": "全新", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
         {"id": 608, "symbol": "6588.TWO", "name": "東典光電", "group_id": 6, "ma_settings": "5,10,20", "note": "光通訊濾光片"},
         {"id": 609, "symbol": "6426.TWO", "name": "統新", "group_id": 6, "ma_settings": "5,10,20", "note": "光通訊濾光片"},
-        {"id": 610, "symbol": "7728.TWO", "name": "光矩科", "group_id": 6, "ma_settings": "5,10,20", "note": "LPO透鏡/興櫃"},
+        {"id": 610, "symbol": "7728.TWO", "name": "光矩科", "group_id": 6, "ma_settings": "5,10,20", "note": "LPO透鏡"},
 
         # Group 7: 電線電纜
         {"id": 701, "symbol": "1605.TW", "name": "華新", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
@@ -188,10 +191,11 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 1605, "symbol": "6282.TW", "name": "康舒", "group_id": 16, "ma_settings": "5,10,20", "note": "電源供應"},
         {"id": 1606, "symbol": "2457.TW", "name": "飛宏", "group_id": 16, "ma_settings": "5,10,20", "note": "充電樁"},
 
-        # Group 17: 半導體測試
+        # Group 17: 半導體測試 (6510, 6223, 6515, 6217)
         {"id": 1701, "symbol": "6510.TW", "name": "精測", "group_id": 17, "ma_settings": "5,10,20", "note": "測試卡"},
         {"id": 1702, "symbol": "6223.TW", "name": "旺矽", "group_id": 17, "ma_settings": "5,10,20", "note": "探針卡"},
         {"id": 1703, "symbol": "6515.TW", "name": "穎崴", "group_id": 17, "ma_settings": "5,10,20", "note": "測試座"},
+        {"id": 1704, "symbol": "6217.TW", "name": "中探針", "group_id": 17, "ma_settings": "5,10,20", "note": "探針"},
 
         # Group 18: BBU備援電池
         {"id": 1801, "symbol": "2301.TW", "name": "光寶科", "group_id": 18, "ma_settings": "5,10,20", "note": "電源"},
@@ -203,6 +207,11 @@ if 'MOCK_STOCKS' not in st.session_state:
         # Group 19: 電子通路
         {"id": 1901, "symbol": "8096.TWO", "name": "擎亞", "group_id": 19, "ma_settings": "5,10,20", "note": "IC通路"},
         {"id": 1902, "symbol": "3028.TW", "name": "增你強", "group_id": 19, "ma_settings": "5,10,20", "note": "IC通路"},
+
+        # Group 20: 太陽能 (3576, 6244, 6443)
+        {"id": 2001, "symbol": "3576.TW", "name": "聯合再生", "group_id": 20, "ma_settings": "5,10,20", "note": ""},
+        {"id": 2002, "symbol": "6244.TWO", "name": "茂迪", "group_id": 20, "ma_settings": "5,10,20", "note": ""},
+        {"id": 2003, "symbol": "6443.TW", "name": "元晶", "group_id": 20, "ma_settings": "5,10,20", "note": ""},
     ]
 
 def get_next_id(item_list):
@@ -580,6 +589,7 @@ elif st.session_state.page == 'stock_detail':
     if st.button(f"⬅️ 返回 {st.session_state.selected_group['name']}", use_container_width=True):
         st.session_state.page = 'group_detail'
         st.rerun()
+
 
 
 
