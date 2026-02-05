@@ -60,158 +60,155 @@ def get_latest_quote_and_change(symbol):
         return df.iloc[-1]['Close'], 0.0
     return None, None
 
-import streamlit as st
 
 # ==========================================
-# 2. 資料庫與 CRUD 操作 (資料庫 V12 - 太陽能擴充版)
+# 2. 資料庫與 CRUD 操作 (資料庫 V13 - 散熱族群新增版)
 # ==========================================
 
 # 初始化族群資料
 if 'MOCK_GROUPS' not in st.session_state:
     st.session_state.MOCK_GROUPS = [
-        {"id": 1, "name": "半導體設備", "note": ""},
-        {"id": 2, "name": "聯發科", "note": ""},
-        {"id": 3, "name": "記憶體", "note": ""},
-        {"id": 4, "name": "面板", "note": ""},
-        {"id": 5, "name": "機器人", "note": ""},
-        {"id": 6, "name": "矽光子", "note": ""},
-        {"id": 7, "name": "電線電纜", "note": ""},
-        {"id": 8, "name": "證券股", "note": ""},
-        {"id": 9, "name": "AI 伺服器機殼", "note": ""},
-        {"id": 10, "name": "軍工", "note": ""},
-        {"id": 11, "name": "AI 伺服器供應鏈", "note": ""},
-        {"id": 12, "name": "IC載板", "note": ""},
-        {"id": 13, "name": "低軌衛星", "note": ""},
-        {"id": 14, "name": "綠能", "note": ""},
-        {"id": 15, "name": "被動元件", "note": ""},
-        {"id": 16, "name": "重電", "note": ""},
-        {"id": 17, "name": "半導體測試", "note": ""},
-        {"id": 18, "name": "BBU備援電池", "note": ""},
-        {"id": 19, "name": "電子通路", "note": ""},
-        {"id": 20, "name": "太陽能", "note": ""},
+        {"id": 1, "name": "記憶體", "note": ""},
+        {"id": 2, "name": "面板", "note": ""},
+        {"id": 3, "name": "矽光子", "note": ""},
+        {"id": 4, "name": "電線電纜", "note": ""},
+        {"id": 5, "name": "證券股", "note": ""},
+        {"id": 6, "name": "AI 伺服器機殼", "note": ""},
+        {"id": 7, "name": "軍工", "note": ""},
+        {"id": 8, "name": "AI 伺服器供應鏈", "note": ""},
+        {"id": 9, "name": "IC載板", "note": ""},
+        {"id": 10, "name": "低軌衛星", "note": ""},
+        {"id": 11, "name": "綠能", "note": ""},
+        {"id": 12, "name": "被動元件", "note": ""},
+        {"id": 13, "name": "重電", "note": ""},
+        {"id": 14, "name": "半導體測試", "note": ""},
+        {"id": 15, "name": "BBU備援電池", "note": ""},
+        {"id": 16, "name": "機器人", "note": ""},
+        {"id": 17, "name": "電子通路", "note": ""},
+        {"id": 18, "name": "太陽能", "note": ""},
+        {"id": 19, "name": "散熱", "note": ""},
     ]
 
 # 初始化個股資料
 if 'MOCK_STOCKS' not in st.session_state:
     st.session_state.MOCK_STOCKS = [
-        # Group 1: 半導體設備
-        {"id": 101, "symbol": "3131.TWO", "name": "弘塑", "group_id": 1, "ma_settings": "5,10,20", "note": "CoWoS設備"},
-        {"id": 102, "symbol": "6187.TWO", "name": "萬潤", "group_id": 1, "ma_settings": "5,10,20", "note": "CoWoS設備"},
-        {"id": 103, "symbol": "3583.TW", "name": "辛耘", "group_id": 1, "ma_settings": "5,10,20", "note": "CoWoS設備"},
+        # Group 1: 記憶體
+        {"id": 101, "symbol": "2344.TW", "name": "華邦電", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
+        {"id": 102, "symbol": "3006.TW", "name": "晶豪科", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
+        {"id": 103, "symbol": "8299.TWO", "name": "群聯", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
+        {"id": 104, "symbol": "2408.TW", "name": "南亞科", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
+        {"id": 105, "symbol": "4967.TW", "name": "十銓", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
+        {"id": 106, "symbol": "2337.TW", "name": "旺宏", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
+        {"id": 107, "symbol": "3260.TWO", "name": "威剛", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
+        {"id": 108, "symbol": "3135.TWO", "name": "凌航", "group_id": 1, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 2: 聯發科
-        {"id": 201, "symbol": "2454.TW", "name": "聯發科", "group_id": 2, "ma_settings": "5,10,20", "note": "IC設計龍頭"},
+        # Group 2: 面板
+        {"id": 201, "symbol": "3481.TW", "name": "群創", "group_id": 2, "ma_settings": "5,10,20", "note": ""},
+        {"id": 202, "symbol": "2409.TW", "name": "友達", "group_id": 2, "ma_settings": "5,10,20", "note": ""},
+        {"id": 203, "symbol": "6116.TW", "name": "彩晶", "group_id": 2, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 3: 記憶體
-        {"id": 301, "symbol": "2344.TW", "name": "華邦電", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
-        {"id": 302, "symbol": "3006.TW", "name": "晶豪科", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
-        {"id": 303, "symbol": "8299.TWO", "name": "群聯", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
-        {"id": 304, "symbol": "2408.TW", "name": "南亞科", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
-        {"id": 305, "symbol": "4967.TW", "name": "十銓", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
-        {"id": 306, "symbol": "2337.TW", "name": "旺宏", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
-        {"id": 307, "symbol": "3260.TWO", "name": "威剛", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
-        {"id": 308, "symbol": "3135.TWO", "name": "凌航", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
+        # Group 3: 矽光子
+        {"id": 301, "symbol": "6451.TW", "name": "訊芯-KY", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
+        {"id": 302, "symbol": "3363.TWO", "name": "上詮", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
+        {"id": 303, "symbol": "3163.TWO", "name": "波若威", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
+        {"id": 304, "symbol": "6442.TW", "name": "光聖", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
+        {"id": 305, "symbol": "4979.TWO", "name": "華星光", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
+        {"id": 306, "symbol": "2345.TW", "name": "智邦", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
+        {"id": 307, "symbol": "2455.TW", "name": "全新", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
+        {"id": 308, "symbol": "6588.TWO", "name": "東典光電", "group_id": 3, "ma_settings": "5,10,20", "note": "濾光片"},
+        {"id": 309, "symbol": "6426.TWO", "name": "統新", "group_id": 3, "ma_settings": "5,10,20", "note": "濾光片"},
+        {"id": 310, "symbol": "7728.TWO", "name": "光矩科", "group_id": 3, "ma_settings": "5,10,20", "note": "LPO透鏡"},
 
-        # Group 4: 面板
-        {"id": 401, "symbol": "3481.TW", "name": "群創", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
-        {"id": 402, "symbol": "2409.TW", "name": "友達", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
-        {"id": 403, "symbol": "6116.TW", "name": "彩晶", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
+        # Group 4: 電線電纜
+        {"id": 401, "symbol": "1605.TW", "name": "華新", "group_id": 4, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 5: 機器人
-        {"id": 501, "symbol": "2359.TW", "name": "所羅門", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
-        {"id": 502, "symbol": "8374.TW", "name": "羅昇", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
+        # Group 5: 證券股
+        {"id": 501, "symbol": "6016.TWO", "name": "康和證", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
+        {"id": 502, "symbol": "6015.TWO", "name": "宏遠證", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
+        {"id": 503, "symbol": "2855.TW", "name": "統一證", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
+        {"id": 504, "symbol": "6005.TW", "name": "群益證", "group_id": 5, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 6: 矽光子
-        {"id": 601, "symbol": "6451.TW", "name": "訊芯-KY", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
-        {"id": 602, "symbol": "3363.TWO", "name": "上詮", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
-        {"id": 603, "symbol": "3163.TWO", "name": "波若威", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
-        {"id": 604, "symbol": "6442.TW", "name": "光聖", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
-        {"id": 605, "symbol": "4979.TWO", "name": "華星光", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
-        {"id": 606, "symbol": "2345.TW", "name": "智邦", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
-        {"id": 607, "symbol": "2455.TW", "name": "全新", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
-        {"id": 608, "symbol": "6588.TWO", "name": "東典光電", "group_id": 6, "ma_settings": "5,10,20", "note": "光通訊濾光片"},
-        {"id": 609, "symbol": "6426.TWO", "name": "統新", "group_id": 6, "ma_settings": "5,10,20", "note": "光通訊濾光片"},
-        {"id": 610, "symbol": "7728.TWO", "name": "光矩科", "group_id": 6, "ma_settings": "5,10,20", "note": "LPO透鏡"},
+        # Group 6: AI 伺服器機殼
+        {"id": 601, "symbol": "3693.TWO", "name": "營邦", "group_id": 6, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 7: 電線電纜
-        {"id": 701, "symbol": "1605.TW", "name": "華新", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
+        # Group 7: 軍工
+        {"id": 701, "symbol": "2634.TW", "name": "漢翔", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
+        {"id": 702, "symbol": "8033.TW", "name": "雷虎", "group_id": 7, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 8: 證券股
-        {"id": 801, "symbol": "6016.TWO", "name": "康和證", "group_id": 8, "ma_settings": "5,10,20", "note": ""},
-        {"id": 802, "symbol": "6015.TWO", "name": "宏遠證", "group_id": 8, "ma_settings": "5,10,20", "note": ""},
-        {"id": 803, "symbol": "2855.TW", "name": "統一證", "group_id": 8, "ma_settings": "5,10,20", "note": ""},
-        {"id": 804, "symbol": "6005.TW", "name": "群益證", "group_id": 8, "ma_settings": "5,10,20", "note": ""},
+        # Group 8: AI 伺服器供應鏈
+        {"id": 801, "symbol": "5274.TWO", "name": "信驊", "group_id": 8, "ma_settings": "5,10,20", "note": "BMC"},
+        {"id": 802, "symbol": "8299.TWO", "name": "群聯", "group_id": 8, "ma_settings": "5,10,20", "note": "Retimer"},
 
-        # Group 9: AI 伺服器機殼
-        {"id": 901, "symbol": "3693.TWO", "name": "營邦", "group_id": 9, "ma_settings": "5,10,20", "note": ""},
+        # Group 9: IC載板
+        {"id": 901, "symbol": "3037.TW", "name": "欣興", "group_id": 9, "ma_settings": "5,10,20", "note": "ABF"},
+        {"id": 902, "symbol": "3189.TW", "name": "景碩", "group_id": 9, "ma_settings": "5,10,20", "note": "ABF/BT"},
+        {"id": 903, "symbol": "8046.TW", "name": "南電", "group_id": 9, "ma_settings": "5,10,20", "note": "ABF"},
+        {"id": 904, "symbol": "4958.TW", "name": "臻鼎-KY", "group_id": 9, "ma_settings": "5,10,20", "note": "PCB"},
+        {"id": 905, "symbol": "2383.TW", "name": "台光電", "group_id": 9, "ma_settings": "5,10,20", "note": "CCL"},
 
-        # Group 10: 軍工
-        {"id": 1001, "symbol": "2634.TW", "name": "漢翔", "group_id": 10, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1002, "symbol": "8033.TW", "name": "雷虎", "group_id": 10, "ma_settings": "5,10,20", "note": ""},
+        # Group 10: 低軌衛星
+        {"id": 1001, "symbol": "2313.TW", "name": "華通", "group_id": 10, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1002, "symbol": "2367.TW", "name": "燿華", "group_id": 10, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1003, "symbol": "2312.TW", "name": "金寶", "group_id": 10, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1004, "symbol": "2485.TW", "name": "兆赫", "group_id": 10, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1005, "symbol": "6285.TW", "name": "啟碁", "group_id": 10, "ma_settings": "5,10,20", "note": "網通"},
 
-        # Group 11: AI 伺服器供應鏈
-        {"id": 1101, "symbol": "5274.TWO", "name": "信驊", "group_id": 11, "ma_settings": "5,10,20", "note": "BMC"},
-        {"id": 1102, "symbol": "8299.TWO", "name": "群聯", "group_id": 11, "ma_settings": "5,10,20", "note": "Retimer"},
+        # Group 11: 綠能
+        {"id": 1101, "symbol": "6624.TWO", "name": "萬年清", "group_id": 11, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1102, "symbol": "8440.TWO", "name": "綠電", "group_id": 11, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1103, "symbol": "8422.TW", "name": "可寧衛", "group_id": 11, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1104, "symbol": "6806.TW", "name": "森崴能源", "group_id": 11, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 12: IC載板
-        {"id": 1201, "symbol": "3037.TW", "name": "欣興", "group_id": 12, "ma_settings": "5,10,20", "note": "ABF"},
-        {"id": 1202, "symbol": "3189.TW", "name": "景碩", "group_id": 12, "ma_settings": "5,10,20", "note": "ABF/BT"},
-        {"id": 1203, "symbol": "8046.TW", "name": "南電", "group_id": 12, "ma_settings": "5,10,20", "note": "ABF"},
-        {"id": 1204, "symbol": "4958.TW", "name": "臻鼎-KY", "group_id": 12, "ma_settings": "5,10,20", "note": "PCB"},
-        {"id": 1205, "symbol": "2383.TW", "name": "台光電", "group_id": 12, "ma_settings": "5,10,20", "note": "CCL"},
+        # Group 12: 被動元件
+        {"id": 1201, "symbol": "2327.TW", "name": "國巨", "group_id": 12, "ma_settings": "5,10,20", "note": "龍頭"},
+        {"id": 1202, "symbol": "2492.TW", "name": "華新科", "group_id": 12, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1203, "symbol": "2375.TW", "name": "凱美", "group_id": 12, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1204, "symbol": "8042.TW", "name": "金山電", "group_id": 12, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1205, "symbol": "8043.TWO", "name": "蜜望實", "group_id": 12, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1206, "symbol": "6173.TWO", "name": "信昌電", "group_id": 12, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1207, "symbol": "2478.TW", "name": "大毅", "group_id": 12, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1208, "symbol": "5328.TWO", "name": "華容", "group_id": 12, "ma_settings": "5,10,20", "note": "薄膜電容"},
 
-        # Group 13: 低軌衛星
-        {"id": 1301, "symbol": "2313.TW", "name": "華通", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1302, "symbol": "2367.TW", "name": "燿華", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1303, "symbol": "2312.TW", "name": "金寶", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1304, "symbol": "2485.TW", "name": "兆赫", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1305, "symbol": "6285.TW", "name": "啟碁", "group_id": 13, "ma_settings": "5,10,20", "note": "網通"},
+        # Group 13: 重電
+        {"id": 1301, "symbol": "1504.TW", "name": "東元", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1302, "symbol": "1513.TW", "name": "中興電", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1303, "symbol": "1519.TW", "name": "華城", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1304, "symbol": "1503.TW", "name": "士電", "group_id": 13, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1305, "symbol": "6282.TW", "name": "康舒", "group_id": 13, "ma_settings": "5,10,20", "note": "電源供應"},
+        {"id": 1306, "symbol": "2457.TW", "name": "飛宏", "group_id": 13, "ma_settings": "5,10,20", "note": "充電樁"},
 
-        # Group 14: 綠能
-        {"id": 1401, "symbol": "6624.TWO", "name": "萬年清", "group_id": 14, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1402, "symbol": "8440.TWO", "name": "綠電", "group_id": 14, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1403, "symbol": "8422.TW", "name": "可寧衛", "group_id": 14, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1404, "symbol": "6806.TW", "name": "森崴能源", "group_id": 14, "ma_settings": "5,10,20", "note": ""},
+        # Group 14: 半導體測試
+        {"id": 1401, "symbol": "6510.TW", "name": "精測", "group_id": 14, "ma_settings": "5,10,20", "note": "測試卡"},
+        {"id": 1402, "symbol": "6223.TW", "name": "旺矽", "group_id": 14, "ma_settings": "5,10,20", "note": "探針卡"},
+        {"id": 1403, "symbol": "6515.TW", "name": "穎崴", "group_id": 14, "ma_settings": "5,10,20", "note": "測試座"},
+        {"id": 1404, "symbol": "6217.TW", "name": "中探針", "group_id": 14, "ma_settings": "5,10,20", "note": "探針"},
 
-        # Group 15: 被動元件
-        {"id": 1501, "symbol": "2327.TW", "name": "國巨", "group_id": 15, "ma_settings": "5,10,20", "note": "龍頭"},
-        {"id": 1502, "symbol": "2492.TW", "name": "華新科", "group_id": 15, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1503, "symbol": "2375.TW", "name": "凱美", "group_id": 15, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1504, "symbol": "8042.TW", "name": "金山電", "group_id": 15, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1505, "symbol": "8043.TWO", "name": "蜜望實", "group_id": 15, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1506, "symbol": "6173.TWO", "name": "信昌電", "group_id": 15, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1507, "symbol": "2478.TW", "name": "大毅", "group_id": 15, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1508, "symbol": "5328.TWO", "name": "華容", "group_id": 15, "ma_settings": "5,10,20", "note": "薄膜電容"},
+        # Group 15: BBU備援電池
+        {"id": 1501, "symbol": "2301.TW", "name": "光寶科", "group_id": 15, "ma_settings": "5,10,20", "note": "電源"},
+        {"id": 1502, "symbol": "2308.TW", "name": "台達電", "group_id": 15, "ma_settings": "5,10,20", "note": "電源龍頭"},
+        {"id": 1503, "symbol": "3211.TW", "name": "順達", "group_id": 15, "ma_settings": "5,10,20", "note": "電池模組"},
+        {"id": 1504, "symbol": "6781.TW", "name": "AES-KY", "group_id": 15, "ma_settings": "5,10,20", "note": "高階電池"},
+        {"id": 1505, "symbol": "4931.TWO", "name": "新普", "group_id": 15, "ma_settings": "5,10,20", "note": "電池模組"},
 
-        # Group 16: 重電
-        {"id": 1601, "symbol": "1504.TW", "name": "東元", "group_id": 16, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1602, "symbol": "1513.TW", "name": "中興電", "group_id": 16, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1603, "symbol": "1519.TW", "name": "華城", "group_id": 16, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1604, "symbol": "1503.TW", "name": "士電", "group_id": 16, "ma_settings": "5,10,20", "note": ""},
-        {"id": 1605, "symbol": "6282.TW", "name": "康舒", "group_id": 16, "ma_settings": "5,10,20", "note": "電源供應"},
-        {"id": 1606, "symbol": "2457.TW", "name": "飛宏", "group_id": 16, "ma_settings": "5,10,20", "note": "充電樁"},
+        # Group 16: 機器人 (Moved here based on new order)
+        {"id": 1601, "symbol": "2359.TW", "name": "所羅門", "group_id": 16, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1602, "symbol": "8374.TW", "name": "羅昇", "group_id": 16, "ma_settings": "5,10,20", "note": ""},
 
-        # Group 17: 半導體測試 (6510, 6223, 6515, 6217)
-        {"id": 1701, "symbol": "6510.TW", "name": "精測", "group_id": 17, "ma_settings": "5,10,20", "note": "測試卡"},
-        {"id": 1702, "symbol": "6223.TW", "name": "旺矽", "group_id": 17, "ma_settings": "5,10,20", "note": "探針卡"},
-        {"id": 1703, "symbol": "6515.TW", "name": "穎崴", "group_id": 17, "ma_settings": "5,10,20", "note": "測試座"},
-        {"id": 1704, "symbol": "6217.TW", "name": "中探針", "group_id": 17, "ma_settings": "5,10,20", "note": "探針"},
+        # Group 17: 電子通路
+        {"id": 1701, "symbol": "8096.TWO", "name": "擎亞", "group_id": 17, "ma_settings": "5,10,20", "note": "IC通路"},
+        {"id": 1702, "symbol": "3028.TW", "name": "增你強", "group_id": 17, "ma_settings": "5,10,20", "note": "IC通路"},
 
-        # Group 18: BBU備援電池
-        {"id": 1801, "symbol": "2301.TW", "name": "光寶科", "group_id": 18, "ma_settings": "5,10,20", "note": "電源"},
-        {"id": 1802, "symbol": "2308.TW", "name": "台達電", "group_id": 18, "ma_settings": "5,10,20", "note": "電源龍頭"},
-        {"id": 1803, "symbol": "3211.TW", "name": "順達", "group_id": 18, "ma_settings": "5,10,20", "note": "電池模組"},
-        {"id": 1804, "symbol": "6781.TW", "name": "AES-KY", "group_id": 18, "ma_settings": "5,10,20", "note": "高階電池"},
-        {"id": 1805, "symbol": "4931.TWO", "name": "新普", "group_id": 18, "ma_settings": "5,10,20", "note": "電池模組"},
+        # Group 18: 太陽能
+        {"id": 1801, "symbol": "3576.TW", "name": "聯合再生", "group_id": 18, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1802, "symbol": "6244.TWO", "name": "茂迪", "group_id": 18, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1803, "symbol": "6443.TW", "name": "元晶", "group_id": 18, "ma_settings": "5,10,20", "note": ""},
+        {"id": 1804, "symbol": "2406.TW", "name": "國碩", "group_id": 18, "ma_settings": "5,10,20", "note": "太陽能材料"},
 
-        # Group 19: 電子通路
-        {"id": 1901, "symbol": "8096.TWO", "name": "擎亞", "group_id": 19, "ma_settings": "5,10,20", "note": "IC通路"},
-        {"id": 1902, "symbol": "3028.TW", "name": "增你強", "group_id": 19, "ma_settings": "5,10,20", "note": "IC通路"},
-
-        # Group 20: 太陽能 (3576, 6244, 6443)
-        {"id": 2001, "symbol": "3576.TW", "name": "聯合再生", "group_id": 20, "ma_settings": "5,10,20", "note": ""},
-        {"id": 2002, "symbol": "6244.TWO", "name": "茂迪", "group_id": 20, "ma_settings": "5,10,20", "note": ""},
-        {"id": 2003, "symbol": "6443.TW", "name": "元晶", "group_id": 20, "ma_settings": "5,10,20", "note": ""},
+        # Group 19: 散熱 (3017, 3324, 3653, 2486)
+        {"id": 1901, "symbol": "3017.TW", "name": "奇鋐", "group_id": 19, "ma_settings": "5,10,20", "note": "散熱模組"},
+        {"id": 1902, "symbol": "3324.TW", "name": "雙鴻", "group_id": 19, "ma_settings": "5,10,20", "note": "液冷散熱"},
+        {"id": 1903, "symbol": "3653.TW", "name": "健策", "group_id": 19, "ma_settings": "5,10,20", "note": "均熱片"},
+        {"id": 1904, "symbol": "2486.TW", "name": "一詮", "group_id": 19, "ma_settings": "5,10,20", "note": "導線架/散熱"},
     ]
 
 def get_next_id(item_list):
@@ -589,6 +586,7 @@ elif st.session_state.page == 'stock_detail':
     if st.button(f"⬅️ 返回 {st.session_state.selected_group['name']}", use_container_width=True):
         st.session_state.page = 'group_detail'
         st.rerun()
+
 
 
 
