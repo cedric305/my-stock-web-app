@@ -61,7 +61,7 @@ def get_latest_quote_and_change(symbol):
     return None, None
 
 # ==========================================
-# 2. 資料庫與 CRUD 操作 (資料庫 V15 - 玻纖布新增與精簡版)
+# 2. 資料庫與 CRUD 操作 (資料庫 V16 - 電子五哥與CCL新增版)
 # ==========================================
 
 # 初始化族群資料
@@ -79,6 +79,9 @@ if 'MOCK_GROUPS' not in st.session_state:
         {"id": 10, "name": "高階玻纖布", "note": ""},
         {"id": 11, "name": "被動元件", "note": ""},
         {"id": 12, "name": "半導體設備", "note": ""},
+        {"id": 13, "name": "電子五哥", "note": ""},
+        {"id": 14, "name": "CCL", "note": ""},
+        {"id": 15, "name": "重電", "note": ""},
     ]
 
 # 初始化個股資料
@@ -111,7 +114,7 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 307, "symbol": "2455.TW", "name": "全新", "group_id": 3, "ma_settings": "5,10,20", "note": ""},
         {"id": 308, "symbol": "6588.TWO", "name": "東典光電", "group_id": 3, "ma_settings": "5,10,20", "note": "濾光片"},
         {"id": 309, "symbol": "6426.TWO", "name": "統新", "group_id": 3, "ma_settings": "5,10,20", "note": "濾光片"},
-        {"id": 310, "symbol": "7728.TWO", "name": "光矩科", "group_id": 3, "ma_settings": "5,10,20", "note": "LPO透鏡"},
+        {"id": 310, "symbol": "7728.TWO", "name": "光矩科", "group_id": 3, "ma_settings": "5,10,20", "note": "LPO透鏡/興櫃"},
 
         # Group 4: 電子通路 (8096, 3028)
         {"id": 401, "symbol": "8096.TWO", "name": "擎亞", "group_id": 4, "ma_settings": "5,10,20", "note": "IC通路"},
@@ -147,7 +150,7 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 903, "symbol": "3653.TW", "name": "健策", "group_id": 9, "ma_settings": "5,10,20", "note": "均熱片"},
         {"id": 904, "symbol": "2486.TW", "name": "一詮", "group_id": 9, "ma_settings": "5,10,20", "note": "導線架/散熱"},
 
-        # Group 10: 高階玻纖布 (1802, 1815, 5475) - NEW
+        # Group 10: 高階玻纖布 (1802, 1815, 5475)
         {"id": 1001, "symbol": "1802.TW", "name": "台玻", "group_id": 10, "ma_settings": "5,10,20", "note": "低介電玻纖布"},
         {"id": 1002, "symbol": "1815.TWO", "name": "富喬", "group_id": 10, "ma_settings": "5,10,20", "note": "玻纖紗/布"},
         {"id": 1003, "symbol": "5475.TWO", "name": "德宏", "group_id": 10, "ma_settings": "5,10,20", "note": "玻纖布"},
@@ -162,9 +165,25 @@ if 'MOCK_STOCKS' not in st.session_state:
         {"id": 1107, "symbol": "2478.TW", "name": "大毅", "group_id": 11, "ma_settings": "5,10,20", "note": ""},
         {"id": 1108, "symbol": "5328.TWO", "name": "華容", "group_id": 11, "ma_settings": "5,10,20", "note": "薄膜電容"},
 
-        # Group 12: 半導體設備 (1560, 2360) - MODIFIED
+        # Group 12: 半導體設備 (1560, 2360)
         {"id": 1201, "symbol": "1560.TW", "name": "中砂", "group_id": 12, "ma_settings": "5,10,20", "note": "鑽石碟/再生晶圓"},
         {"id": 1202, "symbol": "2360.TW", "name": "致茂", "group_id": 12, "ma_settings": "5,10,20", "note": "量測設備"},
+
+        # Group 13: 電子五哥 (2317, 2382, 3231, 6669, 2356) - NEW
+        {"id": 1301, "symbol": "2317.TW", "name": "鴻海", "group_id": 13, "ma_settings": "5,10,20", "note": "EMS龍頭/AI"},
+        {"id": 1302, "symbol": "2382.TW", "name": "廣達", "group_id": 13, "ma_settings": "5,10,20", "note": "AI伺服器"},
+        {"id": 1303, "symbol": "3231.TW", "name": "緯創", "group_id": 13, "ma_settings": "5,10,20", "note": "AI伺服器"},
+        {"id": 1304, "symbol": "6669.TW", "name": "緯穎", "group_id": 13, "ma_settings": "5,10,20", "note": "AI伺服器"},
+        {"id": 1305, "symbol": "2356.TW", "name": "英業達", "group_id": 13, "ma_settings": "5,10,20", "note": "伺服器代工"},
+
+        # Group 14: CCL (6213) - NEW
+        {"id": 1401, "symbol": "6213.TW", "name": "聯茂", "group_id": 14, "ma_settings": "5,10,20", "note": "銅箔基板"},
+
+        # Group 15: 重電 (1519, 1514, 1513, 1511) - NEW
+        {"id": 1501, "symbol": "1519.TW", "name": "華城", "group_id": 15, "ma_settings": "5,10,20", "note": "變壓器"},
+        {"id": 1502, "symbol": "1514.TW", "name": "亞力", "group_id": 15, "ma_settings": "5,10,20", "note": "配電盤"},
+        {"id": 1503, "symbol": "1513.TW", "name": "中興電", "group_id": 15, "ma_settings": "5,10,20", "note": "GIS設備"},
+        {"id": 1504, "symbol": "1511.TW", "name": "待確認(1511)", "group_id": 15, "ma_settings": "5,10,20", "note": "查無此代碼"},
     ]
 
 def get_next_id(item_list):
@@ -542,6 +561,7 @@ elif st.session_state.page == 'stock_detail':
     if st.button(f"⬅️ 返回 {st.session_state.selected_group['name']}", use_container_width=True):
         st.session_state.page = 'group_detail'
         st.rerun()
+
 
 
 
